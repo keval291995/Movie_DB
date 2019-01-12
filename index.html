@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <style>
+  	*{
+  		font-family: 'Source Sans Pro', sans-serif;
+  		letter-spacing: 0.5px;
+  	}
+  	.p-b-50{
+  		padding-bottom:50px;
+  	}
+  	.none{
+  		display:none;
+  	}
+  	.result{
+  		color:#ffffff;
+  	}
+	.tpage{
+		color:#ffffff;
+	}
+  	.loading{
+  		display:none;
+  		background-color:#000;
+  		position:fixed;
+  		width:100%;
+  		height:100%;
+  		z-index:9999;
+  		color:#fff;
+  		text-align:center;
+  		top: 100px;
+    	left: 0;
+    	height: calc(100% - 150px);
+  	}
+  	.full-height{
+  		display: table;
+	    /*height: 100%;*/
+	    height: calc(100vh - 250px);
+	    margin-left: auto;
+	    margin-right: auto;
+	    transition: height 1s;
+  	}
+  	.col-middle{
+  		display: table-cell;
+	    float: none;
+	    vertical-align: middle;
+	    font-size: 30px;
+  	}
+  	.pn_btn{
+	    border-radius: 10px;
+    	border: none;
+    	padding: 5px 20px;
+    	background-color: #ffffff;
+    	display:none;
+  	}
+  	.overview{
+  		white-space: nowrap;
+    	overflow: hidden;
+    	text-overflow: ellipsis;
+  	}
+  	.top_fix{
+  		position: fixed;
+    	width: 100%;
+    	z-index: 99;
+  	}
+  	.btm_fix1{
+  		position: fixed;
+	    bottom: 0;
+	    background: #a52525;
+	    width: 100%;
+	    z-index:99;
+	    height:50px;
+  	}
+  	.btm_fix2{
+  		position: relative;
+    	padding:10px 0;
+  	}
+  	.bk{
+  		background-color: beige;
+  		min-height:100vh;
+  	}
+  	#value{
+  		padding-top:110px;
+  		padding-bottom:60px;
+  		min-height: calc(100vh - 100px);
+  	}
+  	.left{
+  		width:50%;
+  		float:left;
+  	}
+  	.heading{
+  		height: 50px;
+	    padding: 10px 0;
+	    margin: 0;
+	    background-color: #a52525;
+	    color: #ffffff;
+  	}
+  	.no_movie{
+  		position:fixed;
+  		top: 45%;
+    	left: 40%;
+    	font-size: 30px;
+  	}
+  	.rd_mre{
+  		float:right;
+  		border: none;
+	    border-radius: 10px;
+	    padding: 5px 10px;
+	    background-color: #a52525;
+	    color: #ffffff;
+	    box-shadow: 0px 0px 9px 0px #0000004f;
+  	}
+  	.right{
+  		width:50%;
+  		float:left;
+  		height:200px;
+  	}
+  	.panel{
+  		box-shadow: 0 1px 5px 2px rgba(0, 0, 0, 0.17);
+  	}
+  	.detail{
+  		padding-top:10px;
+  		height: 110px;
+	    white-space: inherit;
+	    overflow: hidden;
+	    text-overflow: ellipsis;
+	    margin: 0;
+  	}
+  	.p-t-10{
+  		padding-top:10px;
+  	}
+  	.cont{
+  		display: inline-flex;
+	    flex-direction: column;
+	    padding-left: 10px;
+	    vertical-align: middle;
+  	}
+  	input[name="search_in"]{
+  		width: 100%;
+  		height:50px;
+	    text-align: center;
+	    font-size: 16px;
+	    padding: 10px 0;
+	    border: none;
+	    box-shadow: 0px 0px 2px 2px #00000021;
+  	}
+  	@media (max-width:767px){
+  		.pn_btn {
+		    padding: 5px 10px;
+		}
+		.right{
+			height:auto;
+		}
+  	}
+  </style>
+</head>
+<body>
+
+
+<section class="bk">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="top_fix">
+				<h2 class="text-center heading">Movie Search</h2>
+				<form>
+					<input placeholder="Enter the Movie Name" type="text" class="search_in" name="search_in" autofocus/>
+					<button class="search none">Search</button>
+				</form>
+			</div>
+			<div class="col-md-12 col-sm-12 col-xs-12 p-b-50">
+				<div class="loading">
+					<div class="full-height">
+						<div class="col-middle">Loading...</div>
+					</div>
+				</div>
+				<div id="value">
+					<div class="full-height">
+						<div class="col-middle">No Movie To Display</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<div class="btm_fix1">
+  <div class="btm_fix2">
+  	<div class="container-fluid">
+  		<div class="row">
+  			<div class="text-center col-xs-4 col-sm-4 col-md-4">
+  				<p class="result">0 Results</p>
+			</div>
+			<div class="text-center col-xs-4 col-sm-4 col-md-4">
+  				<p class="tpage">0/0</p>
+			</div>
+  			<div class="text-center col-xs-4 col-sm-4 col-md-4">
+			    <i class="pn_btn fa fa-angle-double-left" onclick="previousPage();" aria-hidden="true"></i>
+			    <i class="pn_btn fa fa-angle-double-right" onclick="nextPage();" aria-hidden="true"></i>
+			</div>
+		</div>
+	</div>
+  </div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div class="modal-body">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script>
+
+
+	var pageSize = 9;
+	var pageNum = 0;
+	var pgno = 0;
+	var query, j, movie;
+	var pn = 0;
+	var d = [];
+
+	function nextPage() {
+		if(pageNum >= pgno - 1){
+	    	loadData();
+		} else {
+	    	pageNum++;
+	    	$(".tpage").text((pageNum+1)+"/"+pgno);
+	    	loadData();
+		}
+	}
+
+	function previousPage() {
+		if(pageNum == 0){
+			loadData();
+		}else{
+	    	pageNum--;
+	    	$(".tpage").text((pageNum+1)+"/"+pgno);
+	    	loadData();
+		}
+	}
+
+	function loadData() {
+	    document.getElementById('value').innerHTML = d.slice(pageNum * pageSize, (pageNum + 1) * pageSize).join("");
+	}
+
+	$(".search").click(function(){    
+		query = $(".search_in").val();
+		d.length = 0;
+		pn = 0;
+		pageNum = 0;
+		$.ajax({
+			type: "POST",
+          	url: "https://api.themoviedb.org/3/search/movie?api_key=1d5e62da6021dc23262fc75b92071eee&page=1&query="+query
+		}).done(function(response){
+			$("#value").empty();
+			console.log(response);
+			if(response.results!=0){
+				var page = response.total_pages;
+				movie = response.total_results;
+				pgno =  Math.ceil(movie/9);
+				$(".tpage").text("1/"+pgno);
+				$(".result").text(movie+" Results");
+				$(".loading").show();
+				for(var i = 1; i <= page; i++ ){
+					ajax_call(i);
+				}
+				$(".pn_btn").show();
+			} else {
+				$(".pn_btn").hide();
+				$(".tpage").text("0/0");
+				$(".result").text("0 Results");
+				$("#value").html('<div class="full-height"><div class="col-middle">Movie Not Found</div></div>');		
+			}
+		}).fail(function() {
+			$(".pn_btn").hide();
+			$(".tpage").text("0/0");
+			$(".result").text("0 Results");
+		    $("#value").html('<div class="full-height"><div class="col-middle">Enter the movie name</div></div>');
+		});
+        return false;
+	});	
+	function ajax_call(i){
+		j = i;
+		$.ajax({
+			type: "POST",
+          	url: "https://api.themoviedb.org/3/search/movie?api_key=1d5e62da6021dc23262fc75b92071eee&page="+j+"&query="+query
+		}).done(function(response){
+			var ap_ = (response.results).length;
+			for(var k=0; k<ap_; k++){
+				var title = response.results[k].original_title;
+				var date = response.results[k].release_date;
+				var poster = response.results[k].poster_path;
+				var overview = response.results[k].overview;
+				if((overview.length)<=0){
+					overview = "No Overview Found"
+				}
+				var vote = response.results[k].vote_average;
+				var vote_count = response.results[k].vote_count;
+ 				
+ 				d.push("<div class='col-md-4 col-sm-6 col-xs-12'><div class='panel'><div><div class='left'><img width='150' height='200' alt='No image' src='https://image.tmdb.org/t/p/w600_and_h900_bestv2"+poster+"'></div><div class='right panel-heading'><h4>"+title+"</h4><hr/><p class='date'><b>Release Date: </b>"+date+"</p><p class='avg'><b>Average Vote: </b>"+vote+"/10</p><p class='vc'><b>Vote Count: </b>"+vote_count+"</p></div></div><div class='detail panel-body'><p><b>Overview</b></p><p class='overview' title='"+overview+"'>"+overview+"</p><button class='rd_mre'>Read More</button></div></div></div>");
+
+ 				pn = pn + 1;
+			}
+			if(movie == pn){
+				$(".loading").hide();
+				loadData();
+			}
+		})
+	}
+
+	$("#value").on("click",".rd_mre",function(){
+		var th = $(this).parents(".panel");
+		var title = $(th).find("h4");
+		var img = $(th).find("img");
+		var date = $(th).find(".date");
+		var avg = $(th).find(".avg");
+		var vc = $(th).find(".vc");
+		var over = $(th).find(".overview");
+		$(".modal-title").text(title[0].innerText);
+		$(".modal-body").html("<div><div><img alt='No image' height='200' width='150' src='"+img[0].currentSrc+"'><div class='cont'><p class='date'>"+date[0].innerHTML+"</p><p class='avg'>"+avg[0].innerHTML+"</p><p class='vc'>"+vc[0].innerHTML+"</p></div></div><div class='p-t-10'><p><b>Overview</b></p><p>"+over[0].innerText+"</p></div></div>")
+		$("#myModal").modal();
+	})
+</script>
+
+</html>
